@@ -529,7 +529,7 @@ type Client struct {
 	session              string
 	sender               *auth.Sender
 	cseq                 int
-	optionsSent          bool
+	OptionsSent          bool
 	useGetParameter      bool
 	lastDescribeURL      *base.URL
 	lastDescribeDesc     *description.Session
@@ -951,7 +951,7 @@ func (c *Client) reset() {
 	c.session = ""
 	c.sender = nil
 	c.cseq = 0
-	c.optionsSent = false
+	c.OptionsSent = false
 	c.useGetParameter = false
 	c.baseURL = nil
 	c.setuppedTransport = nil
@@ -1176,7 +1176,7 @@ func (c *Client) connOpen() error {
 }
 
 func (c *Client) do(req *base.Request, skipResponse bool) (*base.Response, error) {
-	if !c.optionsSent && req.Method != base.Options {
+	if !c.OptionsSent && req.Method != base.Options {
 		_, err := c.doOptions(req.URL)
 		if err != nil {
 			return nil, err
@@ -1365,7 +1365,7 @@ func (c *Client) doOptions(u *base.URL) (*base.Response, error) {
 		return nil, liberrors.ErrClientBadStatusCode{Code: res.StatusCode, Message: res.StatusMessage}
 	}
 
-	c.optionsSent = true
+	c.OptionsSent = true
 	c.useGetParameter = supportsGetParameter(res.Header)
 
 	return res, nil
